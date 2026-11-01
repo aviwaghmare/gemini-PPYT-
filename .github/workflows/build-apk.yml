@@ -24,29 +24,26 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: 4. Set up Android SDK
-        uses: android-actions/setup-android@v3
-
-      - name: 5. Install Dependencies & Generate Capacitor Android Project
+      - name: 4. Install Dependencies & Generate Capacitor Android Project
         run: |
           npm install
           npx cap add android
           npx cap sync android
 
-      - name: 6. Apply Custom PowerPoint App Icon & Standalone WhatsApp Manifest Fix
+      - name: 5. Apply Custom PowerPoint App Icon & Standalone WhatsApp Manifest Fix
         run: |
           if [ -f "android-config/AndroidManifest.xml" ]; then
             cp -f android-config/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
           fi
           npx @capacitor/assets generate --android || true
 
-      - name: 7. Compile Installable Android APK with Gradle
+      - name: 6. Compile Installable Android APK with Gradle
         working-directory: ./android
         run: |
           chmod +x gradlew
           ./gradlew assembleDebug
 
-      - name: 8. Rename & Upload Installable PowerPoint-Lite.apk Artifact
+      - name: 7. Rename & Upload Installable PowerPoint-Lite.apk Artifact
         uses: actions/upload-artifact@v4
         with:
           name: PowerPoint-Lite-APK
