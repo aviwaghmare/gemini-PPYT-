@@ -1,0 +1,1047 @@
+/* ==========================================================================
+   POWERPOINT LITE — LUXURY ANDROID UI STYLESHEET (www/style.css)
+   ========================================================================== */
+
+:root,
+[data-theme="dark"] {
+  --bg-primary: #000000;
+  --bg-secondary: #141414;
+  --bg-elevated: #1f1f1f;
+  --bg-sheet: #242424;
+  --bg-reader-canvas: #121212;
+  --text-primary: #f2f2f2;
+  --text-secondary: #9e9e9e;
+  --text-brand: #e89b78;
+  --accent-ppt: #e89b78;
+  --accent-ppt-strong: #d94426;
+  --border-subtle: #2a2a2a;
+  --pill-bg: rgba(36, 36, 36, 0.94);
+  --danger: #ff5252;
+  --highlight-find: rgba(255, 214, 0, 0.45);
+  --highlight-find-active: rgba(255, 145, 0, 0.85);
+}
+
+[data-theme="light"] {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f5f5f5;
+  --bg-elevated: #eeeeee;
+  --bg-sheet: #ffffff;
+  --bg-reader-canvas: #e5e5e5;
+  --text-primary: #1a1a1a;
+  --text-secondary: #666666;
+  --text-brand: #c43e1c;
+  --accent-ppt: #c43e1c;
+  --accent-ppt-strong: #b83314;
+  --border-subtle: #dcdcdc;
+  --pill-bg: rgba(255, 255, 255, 0.94);
+  --danger: #d32f2f;
+  --highlight-find: rgba(255, 214, 0, 0.5);
+  --highlight-find-active: rgba(255, 145, 0, 0.9);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.hidden {
+  display: none !important;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  z-index: 1;
+}
+
+.screen.active {
+  display: flex;
+}
+
+button {
+  background: none;
+  border: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.icon-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-primary);
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:active {
+  background-color: var(--bg-elevated);
+  transform: scale(0.93);
+}
+
+.icon-btn-sm {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: var(--text-primary);
+}
+
+.home-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px 8px 16px;
+  padding-top: max(12px, env(safe-area-inset-top));
+  background-color: var(--bg-primary);
+}
+
+.brand-trigger {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  padding: 4px 8px 4px 0;
+  border-radius: 8px;
+}
+
+.brand-trigger:active {
+  opacity: 0.75;
+}
+
+.ppt-logo-badge {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-title {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  color: var(--text-brand);
+}
+
+.home-search-bar {
+  padding: 6px 16px 10px 16px;
+  background-color: var(--bg-primary);
+}
+
+.search-input-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  border-radius: 24px;
+  padding: 8px 14px;
+}
+
+.search-input-wrap input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.home-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--border-subtle);
+  background-color: var(--bg-primary);
+}
+
+.tab-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 6px;
+  color: var(--text-secondary);
+  font-size: 15px;
+  font-weight: 500;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.tab-btn.active {
+  color: var(--accent-ppt);
+}
+
+.tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 12%;
+  width: 76%;
+  height: 2.5px;
+  background-color: var(--accent-ppt);
+  border-radius: 2px 2px 0 0;
+}
+
+.home-content {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  padding: 12px 0 32px 0;
+}
+
+.list-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 18px 12px 18px;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.pill-Import-btn {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--accent-ppt);
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-subtle);
+  padding: 5px 12px;
+  border-radius: 16px;
+}
+
+.ppt-file-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.ppt-file-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 14px 13px 18px;
+  gap: 14px;
+  transition: background-color 0.12s ease;
+  cursor: pointer;
+}
+
+.ppt-file-item:active {
+  background-color: var(--bg-secondary);
+}
+
+.file-item-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 9px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.28);
+}
+
+.file-item-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.file-item-name {
+  font-size: 16.5px;
+  font-weight: 400;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.file-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  color: var(--text-secondary);
+}
+
+.star-badge-inline {
+  color: #ffb300;
+  font-size: 12px;
+}
+
+.file-item-more-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 64px 24px;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+.primary-pill-btn {
+  background-color: var(--accent-ppt-strong);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 14.5px;
+  padding: 10px 22px;
+  border-radius: 24px;
+  box-shadow: 0 4px 12px rgba(217, 68, 38, 0.35);
+}
+
+.secondary-pill-btn {
+  background-color: var(--bg-elevated);
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 14.5px;
+  padding: 10px 20px;
+  border-radius: 24px;
+}
+
+.reader-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 10px;
+  padding-top: max(10px, env(safe-area-inset-top));
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+  z-index: 20;
+}
+
+.reader-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.reader-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.reader-file-title {
+  font-size: 17.5px;
+  font-weight: 400;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cloud-saved-icon {
+  font-size: 13px;
+  opacity: 0.65;
+  flex-shrink: 0;
+}
+
+.reader-header-right {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.slide-find-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background-color: var(--bg-elevated);
+  border-bottom: 1px solid var(--border-subtle);
+  gap: 10px;
+  z-index: 19;
+}
+
+.find-input-box {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background-color: var(--bg-secondary);
+  border-radius: 6px;
+  padding: 6px 10px;
+}
+
+.find-input-box input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-primary);
+  font-size: 15px;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.find-count {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-left: 8px;
+}
+
+.find-nav-Controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.divider-pipe {
+  color: var(--border-subtle);
+  margin: 0 2px;
+}
+
+.slide-counter-badge {
+  position: absolute;
+  top: 70px;
+  right: 14px;
+  background-color: rgba(20, 20, 20, 0.88);
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 400;
+  padding: 6px 12px;
+  border-radius: 6px;
+  z-index: 15;
+  pointer-events: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  transition: opacity 0.25s ease;
+}
+
+.reader-scroll-viewport {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  background-color: var(--bg-reader-canvas);
+  position: relative;
+  touch-action: pan-y pinch-zoom;
+}
+
+.reader-slides-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0 96px 0;
+  transform-origin: center top;
+  will-change: transform;
+}
+
+.slide-card-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+
+.slide-card {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #ffffff;
+  color: #111111;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.4);
+  transform-origin: top left;
+}
+
+.ppt-element {
+  position: absolute;
+  box-sizing: border-box;
+  line-height: 1.28;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+.ppt-text-box {
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: text;
+}
+
+.ppt-image-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  pointer-events: none;
+}
+
+.ppt-shape-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+mark.ppt-find-match {
+  background-color: var(--highlight-find);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+mark.ppt-find-match.active-match {
+  background-color: var(--highlight-find-active);
+  outline: 2px solid #ff6d00;
+}
+
+.reader-floating-footer {
+  position: absolute;
+  bottom: max(20px, env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+}
+
+.floating-play-pill {
+  background-color: var(--pill-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--text-primary);
+  width: 78px;
+  height: 52px;
+  border-radius: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.55);
+  border: 1px solid var(--border-subtle);
+  transition: transform 0.15s ease;
+}
+
+.floating-play-pill:active {
+  transform: scale(0.92);
+}
+
+.editor-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  padding-top: max(10px, env(safe-area-inset-top));
+  background-color: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.editor-header-left,
+.editor-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.discard-btn {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  padding: 6px 12px;
+  border-radius: 16px;
+  background-color: var(--bg-elevated);
+}
+
+.editor-workspace {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--bg-reader-canvas);
+  padding: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.editor-slide-stage-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editable-stage .ppt-element {
+  cursor: pointer;
+}
+
+.editable-stage .ppt-element.selected-element {
+  outline: 2px solid #5c6bc0;
+  box-shadow: 0 0 0 4px rgba(92, 107, 192, 0.2);
+  z-index: 50 !important;
+}
+
+.editable-stage .ppt-element.selected-element::before,
+.editable-stage .ppt-element.selected-element::after {
+  content: "";
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 2px solid #555555;
+}
+
+.editable-stage .ppt-element.selected-element::before {
+  top: -6px;
+  left: -6px;
+}
+
+.editable-stage .ppt-element.selected-element::after {
+  bottom: -6px;
+  right: -6px;
+}
+
+.editor-context-pill {
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border-radius: 26px;
+  padding: 8px 16px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  z-index: 60;
+  border: 1px solid #383838;
+}
+
+.editor-context-pill button {
+  font-size: 14.5px;
+  font-weight: 500;
+  padding: 4px 6px;
+}
+
+.danger-text {
+  color: var(--danger) !important;
+}
+
+.editor-filmstrip-bar {
+  background-color: var(--bg-primary);
+  border-top: 1px solid var(--border-subtle);
+  padding: 10px 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.editor-thumbnails-track {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.editor-thumb-item {
+  width: 112px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  background-color: #2b2b2b;
+  cursor: pointer;
+}
+
+.editor-thumb-item.active {
+  border-color: #d96b27;
+}
+
+.editor-thumb-preview {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #ffffff;
+  position: relative;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.editor-thumb-number {
+  padding: 3px 6px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #333333;
+}
+
+.editor-thumb-item.active .editor-thumb-number {
+  background-color: #d96b27;
+}
+
+.editor-bottom-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 8px 10px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
+  background-color: var(--bg-secondary);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.tool-btn {
+  min-width: 38px;
+  height: 38px;
+  padding: 0 8px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+
+.tool-btn:active,
+.tool-btn.active {
+  background-color: var(--bg-elevated);
+  color: var(--accent-ppt);
+}
+
+.color-picker-label {
+  position: relative;
+  cursor: pointer;
+}
+
+.color-letter {
+  font-weight: 700;
+  border-bottom: 3px solid #d93829;
+  line-height: 1;
+}
+
+.color-picker-label input[type="color"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+.fullscreen-player {
+  background-color: #000000;
+  z-index: 100;
+}
+
+.fs-hud-overlay {
+  position: absolute;
+  top: max(14px, env(safe-area-inset-top));
+  left: 16px;
+  right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 110;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.fs-hud-overlay.hud-hidden {
+  opacity: 0;
+}
+
+.fs-exit-btn,
+.fs-slide-indicator {
+  pointer-events: auto;
+  background-color: rgba(20, 20, 20, 0.72);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 14px;
+  backdrop-filter: blur(6px);
+}
+
+.fs-touch-stage {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  touch-action: none;
+}
+
+.fs-slide-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  will-change: transform;
+  transform-origin: center center;
+}
+
+.fs-slide-wrapper .slide-card {
+  width: min(100vw, calc(100vh * (16 / 9)));
+  height: min(100vh, calc(100vw * (9 / 16)));
+  box-shadow: none;
+}
+
+@media (orientation: portrait) {
+  .fullscreen-player.force-landscape-css .fs-slide-wrapper {
+    width: 100vh;
+    height: 100vw;
+    transform: rotate(90deg);
+  }
+  .fullscreen-player.force-landscape-css .fs-slide-wrapper .slide-card {
+    width: min(100vh, calc(100vw * (16 / 9)));
+    height: min(100vw, calc(100vh * (9 / 16)));
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: 200;
+  animation: fadeIn 0.18s ease;
+}
+
+.bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-sheet);
+  border-radius: 20px 20px 0 0;
+  padding: 10px 0 max(20px, env(safe-area-inset-bottom)) 0;
+  z-index: 210;
+  box-shadow: 0 -6px 24px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sheet-handle {
+  width: 38px;
+  height: 4px;
+  background-color: var(--text-secondary);
+  opacity: 0.45;
+  border-radius: 2px;
+  margin: 4px auto 12px auto;
+}
+
+.sheet-file-header {
+  padding: 6px 22px 14px 22px;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sheet-filename {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.sheet-filepath {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sheet-action-list {
+  list-style: none;
+  padding-top: 6px;
+}
+
+.sheet-action-list li {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 15px 24px;
+  font-size: 16.5px;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.sheet-action-list li:active {
+  background-color: var(--bg-elevated);
+}
+
+.sheet-icon {
+  width: 28px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.pdf-badge {
+  font-size: 10px;
+  font-weight: 800;
+  border: 1.5px solid #e57373;
+  color: #e57373;
+  border-radius: 4px;
+  padding: 2px 3px;
+}
+
+.danger-item {
+  color: var(--danger) !important;
+}
+
+.dialog-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(90vw, 360px);
+  background-color: var(--bg-sheet);
+  border-radius: 18px;
+  padding: 22px;
+  z-index: 220;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
+}
+
+.dialog-modal h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.modal-subtext {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+.theme-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.theme-radio-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background-color: var(--bg-secondary);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.modal-text-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  font-size: 15.5px;
+  margin: 14px 0 20px 0;
+  outline: none;
+  user-select: text;
+  -webkit-user-select: text;
+}
+
+.modal-footer-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.app-toast {
+  position: fixed;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #323232;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 24px;
+  font-size: 14px;
+  z-index: 300;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.45);
+}
+
+.loading-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.72);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  z-index: 350;
+  color: #ffffff;
+}
+
+.spinner-ring {
+  width: 40px;
+  height: 40px;
+  border: 3.5px solid rgba(232, 155, 120, 0.25);
+  border-top-color: var(--accent-ppt);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #reader-slides-list,
+  #reader-slides-list * {
+    visibility: visible;
+  }
+  #reader-slides-list {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}

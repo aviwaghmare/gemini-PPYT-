@@ -1,0 +1,12 @@
+{
+  "appId": "com.powerpoint.lite.reader",
+  "appName": "PowerPoint",
+  "webDir": "www",
+  "bundledWebRuntime": false,
+  "backgroundColor": "#000000",
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
+}

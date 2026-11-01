@@ -1,0 +1,54 @@
+name: Build PowerPoint Lite Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build-android-apk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 1. Checkout Repository Code
+        uses: actions/checkout@v4
+
+      - name: 2. Set up Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. Set up Java JDK 17 (Required for Android Gradle)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: 4. Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: 5. Install Dependencies & Generate Capacitor Android Project
+        run: |
+          npm install
+          npx cap add android
+          npx cap sync android
+
+      - name: 6. Apply Custom PowerPoint App Icon & Standalone WhatsApp Manifest Fix
+        run: |
+          if [ -f "android-config/AndroidManifest.xml" ]; then
+            cp -f android-config/AndroidManifest.xml android/app/src/main/AndroidManifest.xml
+          fi
+          npx @capacitor/assets generate --android || true
+
+      - name: 7. Compile Installable Android APK with Gradle
+        working-directory: ./android
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
+
+      - name: 8. Rename & Upload Installable PowerPoint-Lite.apk Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: PowerPoint-Lite-APK
+          path: android/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error

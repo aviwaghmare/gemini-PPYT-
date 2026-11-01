@@ -1,0 +1,18 @@
+{
+  "name": "powerpoint-lite-android",
+  "version": "1.0.0",
+  "description": "Ultra-lightweight luxury PowerPoint (.pptx) reader and quick editor for Android",
+  "main": "www/index.html",
+  "scripts": {
+    "init:android": "npx cap add android",
+    "sync:android": "npx cap sync android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^6.0.0"
+  }
+}

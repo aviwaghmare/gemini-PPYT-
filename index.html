@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0d0d" />
+  <title>PowerPoint</title>
+  <link rel="icon" type="image/png" href="assets/logo.png" />
+  <link rel="apple-touch-icon" href="assets/logo.png" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+  <input type="file" id="native-file-picker" accept=".pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation" style="display: none;" multiple />
+  <input type="file" id="editor-image-picker" accept="image/*" style="display: none;" />
+
+  <!-- 1. HOME SCREEN (Page 02) -->
+  <section id="screen-home" class="screen active">
+    <header class="home-header">
+      <div class="brand-trigger" id="btn-open-theme-settings" title="Tap to switch Dark/Light theme">
+        <div class="ppt-logo-badge">
+          <svg viewBox="0 0 48 48" width="32" height="32">
+            <defs>
+              <linearGradient id="pptGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ff8c00" />
+                <stop offset="50%" stop-color="#e84c64" />
+                <stop offset="100%" stop-color="#c42b4b" />
+              </linearGradient>
+              <linearGradient id="pptBoxGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#d93829" />
+                <stop offset="100%" stop-color="#9e1b12" />
+              </linearGradient>
+            </defs>
+            <circle cx="26" cy="24" r="19" fill="url(#pptGrad1)" />
+            <path d="M26 5 A19 19 0 0 1 45 24 L26 24 Z" fill="#ff9f2e" opacity="0.85" />
+            <rect x="4" y="21" width="21" height="21" rx="4.5" fill="url(#pptBoxGrad)" />
+            <text x="14.5" y="37" fill="#ffffff" font-family="sans-serif" font-weight="800" font-size="16" text-anchor="middle">P</text>
+          </svg>
+        </div>
+        <h1 class="app-title">PowerPoint</h1>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="btn-home-search-toggle" aria-label="Search PPT files">
+          <svg viewBox="0 0 24 24" width="22" height="22" stroke="currentColor" stroke-width="2" fill="none">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="20" y1="20" x2="16.35" y2="16.35"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="home-search-bar" class="home-search-bar hidden">
+      <div class="search-input-wrap">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none">
+          <circle cx="11" cy="11" r="7"></circle>
+          <line x1="20" y1="20" x2="16.35" y2="16.35"></line>
+        </svg>
+        <input type="text" id="home-search-input" placeholder="Search presentations..." autocomplete="off" />
+        <button class="icon-btn-sm" id="btn-home-search-clear" aria-label="Close search">✕</button>
+      </div>
+    </div>
+
+    <nav class="home-tabs" role="tablist">
+      <button class="tab-btn active" data-tab="recent" role="tab" aria-selected="true">
+        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none">
+          <circle cx="12" cy="12" r="9"></circle>
+          <polyline points="12 7 12 12 15.5 14"></polyline>
+        </svg>
+        <span>Recent</span>
+      </button>
+
+      <button class="tab-btn" data-tab="open" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none">
+          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>Open</span>
+      </button>
+
+      <button class="tab-btn" data-tab="favourite" role="tab" aria-selected="false">
+        <svg viewBox="0 0 24 24" width="19" height="19" stroke="currentColor" stroke-width="2" fill="none">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+        <span>Favourite</span>
+      </button>
+    </nav>
+
+    <main class="home-content" id="home-file-list-container">
+      <div class="list-section-header">
+        <span id="list-section-title">Last Week</span>
+        <button id="btn-browse-device-ppt" class="pill-Import-btn">+ Browse Device PPT</button>
+      </div>
+      <div id="ppt-file-list" class="ppt-file-list"></div>
+      <div id="empty-list-state" class="empty-state hidden">
+        <p id="empty-state-msg">No presentations found.</p>
+        <button id="btn-empty-pick-file" class="primary-pill-btn">Select PPTX File from Device</button>
+      </div>
+    </main>
+  </section>
+
+  <!-- 2. VERTICAL SLIDE READER SCREEN (Page 03) -->
+  <section id="screen-reader" class="screen">
+    <header class="reader-header">
+      <div class="reader-header-left">
+        <button class="icon-btn" id="btn-reader-close" aria-label="Back to Home">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <div class="reader-title-wrap">
+          <span id="reader-file-title" class="reader-file-title">Presentation.pptx</span>
+          <span class="cloud-saved-icon" title="Local File Synced">☁️</span>
+        </div>
+      </div>
+
+      <div class="reader-header-right">
+        <button class="icon-btn" id="btn-enter-edit-mode" aria-label="Edit Presentation">
+          <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn" id="btn-open-slide-find" aria-label="Find text in slides">
+          <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2" fill="none">
+            <circle cx="11" cy="11" r="7"></circle>
+            <line x1="20" y1="20" x2="16.35" y2="16.35"></line>
+          </svg>
+        </button>
+
+        <button class="icon-btn" id="btn-open-reader-more" aria-label="More options">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+            <circle cx="5" cy="12" r="2"></circle>
+            <circle cx="12" cy="12" r="2"></circle>
+            <circle cx="19" cy="12" r="2"></circle>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div id="slide-find-bar" class="slide-find-bar hidden">
+      <div class="find-input-box">
+        <input type="text" id="slide-find-input" placeholder="Find..." autocomplete="off" />
+        <span id="slide-find-count" class="find-count">0/0</span>
+      </div>
+      <div class="find-nav-Controls">
+        <button class="icon-btn-sm" id="btn-find-prev" aria-label="Previous match">‹</button>
+        <button class="icon-btn-sm" id="btn-find-next" aria-label="Next match">›</button>
+        <span class="divider-pipe">|</span>
+        <button class="icon-btn-sm" id="btn-find-close" aria-label="Close find">✕</button>
+      </div>
+    </div>
+
+    <div id="slide-counter-badge" class="slide-counter-badge">Slide 1 of 1</div>
+
+    <div id="reader-scroll-viewport" class="reader-scroll-viewport">
+      <div id="reader-slides-list" class="reader-slides-list"></div>
+    </div>
+
+    <div class="reader-floating-footer">
+      <button id="btn-launch-fullscreen-play" class="floating-play-pill" aria-label="Play Horizontal Full Screen">
+        <svg viewBox="0 0 24 24" width="26" height="26" stroke="currentColor" stroke-width="2" fill="none">
+          <polygon points="6 4 20 12 6 20 6 4"></polygon>
+        </svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- 3. SIMPLE EDIT MODE SCREEN (Page 04) -->
+  <section id="screen-editor" class="screen">
+    <header class="editor-header">
+      <div class="editor-header-left">
+        <button class="icon-btn" id="btn-editor-save-done" title="Save edits and return">
+          <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2.2" fill="none">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </button>
+        <button class="text-pill-btn discard-btn" id="btn-editor-discard">Discard</button>
+      </div>
+
+      <div class="editor-header-right">
+        <button class="icon-btn" id="btn-editor-undo" title="Undo change">
+          <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none">
+            <path d="M9 14L4 9l5-5"></path>
+            <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5v0a5.5 5.5 0 0 1-5.5 5.5H11"></path>
+          </svg>
+        </button>
+
+        <button class="icon-btn" id="btn-editor-play" title="Play Fullscreen">
+          <svg viewBox="0 0 24 24" width="21" height="21" stroke="currentColor" stroke-width="2" fill="none">
+            <polygon points="6 4 20 12 6 20 6 4"></polygon>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="editor-workspace" id="editor-workspace">
+      <div id="editor-context-pill" class="editor-context-pill hidden">
+        <button type="button" id="btn-ctx-cut">Cut</button>
+        <button type="button" id="btn-ctx-copy">Copy</button>
+        <button type="button" id="btn-ctx-paste">Paste</button>
+        <button type="button" id="btn-ctx-delete" class="danger-text">Delete</button>
+      </div>
+
+      <div id="editor-slide-stage-wrapper" class="editor-slide-stage-wrapper">
+        <div id="editor-slide-canvas" class="slide-card editable-stage"></div>
+      </div>
+    </div>
+
+    <div class="editor-filmstrip-bar">
+      <div id="editor-thumbnails-track" class="editor-thumbnails-track"></div>
+    </div>
+
+    <footer class="editor-bottom-toolbar">
+      <button class="tool-btn" id="btn-fmt-bold" title="Bold"><b>B</b></button>
+      <button class="tool-btn" id="btn-fmt-italic" title="Italic"><i>I</i></button>
+      <button class="tool-btn" id="btn-fmt-underline" title="Underline"><u>U</u></button>
+
+      <label class="tool-btn color-picker-label" title="Text Color">
+        <span class="color-letter">A</span>
+        <input type="color" id="input-fmt-color" value="#d93829" />
+      </label>
+
+      <button class="tool-btn" id="btn-fmt-size-down" title="Decrease Font Size">A-</button>
+      <button class="tool-btn" id="btn-fmt-size-up" title="Increase Font Size">A+</button>
+      <button class="tool-btn" id="btn-fmt-add-text" title="Add Text Box">+Text</button>
+      <button class="tool-btn" id="btn-fmt-image" title="Insert or Replace Image">🖼️</button>
+    </footer>
+  </section>
+
+  <!-- 4. HORIZONTAL FULL-SCREEN CINEMA MODE (Page 07) -->
+  <section id="screen-fullscreen-player" class="screen fullscreen-player">
+    <div id="fs-hud-overlay" class="fs-hud-overlay">
+      <button id="btn-exit-fullscreen" class="fs-exit-btn" aria-label="Exit Full Screen">✕</button>
+      <span id="fs-slide-indicator" class="fs-slide-indicator">1 / 1</span>
+    </div>
+
+    <div id="fs-touch-stage" class="fs-touch-stage">
+      <div id="fs-slide-wrapper" class="fs-slide-wrapper"></div>
+    </div>
+  </section>
+
+  <!-- 5. MODALS & BOTTOM SHEETS -->
+  <div id="modal-backdrop" class="modal-backdrop hidden"></div>
+
+  <div id="modal-theme-settings" class="dialog-modal hidden" role="dialog" aria-labelledby="theme-modal-title">
+    <h3 id="theme-modal-title">App Appearance</h3>
+    <p class="modal-subtext">Slides always stay in their original colors for crystal-clear reading.</p>
+    <div class="theme-options">
+      <label class="theme-radio-row">
+        <input type="radio" name="app-theme" value="dark" checked />
+        <span>🌙 Dark Theme (Luxury Matte)</span>
+      </label>
+      <label class="theme-radio-row">
+        <input type="radio" name="app-theme" value="light" />
+        <span>☀️ Light Theme (Clean Daylight)</span>
+      </label>
+    </div>
+    <div class="modal-footer-btns">
+      <button id="btn-close-theme-modal" class="primary-pill-btn">Done</button>
+    </div>
+  </div>
+
+  <div id="sheet-file-actions" class="bottom-sheet hidden">
+    <div class="sheet-handle"></div>
+    <div class="sheet-file-header">
+      <span id="sheet-selected-filename" class="sheet-filename">File.pptx</span>
+      <span id="sheet-selected-filepath" class="sheet-filepath">WhatsApp</span>
+    </div>
+    <ul class="sheet-action-list">
+      <li id="action-file-star">
+        <span class="sheet-icon">⭐</span>
+        <span id="label-file-star">Add to Favourite</span>
+      </li>
+      <li id="action-file-share">
+        <span class="sheet-icon">🔗</span>
+        <span>Share</span>
+      </li>
+      <li id="action-file-rename">
+        <span class="sheet-icon">✏️</span>
+        <span>Rename File</span>
+      </li>
+      <li id="action-file-delete" class="danger-item">
+        <span class="sheet-icon">🗑️</span>
+        <span>Delete File</span>
+      </li>
+    </ul>
+  </div>
+
+  <div id="sheet-reader-more" class="bottom-sheet hidden">
+    <div class="sheet-handle"></div>
+    <ul class="sheet-action-list">
+      <li id="action-export-pdf">
+        <span class="sheet-icon pdf-badge">PDF</span>
+        <span>Share as PDF</span>
+      </li>
+      <li id="action-save-ppt">
+        <span class="sheet-icon">💾</span>
+        <span>Save</span>
+      </li>
+      <li id="action-save-as-ppt">
+        <span class="sheet-icon">📝</span>
+        <span>Save As</span>
+      </li>
+      <li id="action-print-ppt">
+        <span class="sheet-icon">🖨️</span>
+        <span>Print</span>
+      </li>
+    </ul>
+  </div>
+
+  <div id="modal-rename-file" class="dialog-modal hidden">
+    <h3 id="rename-modal-title">Rename Presentation</h3>
+    <input type="text" id="input-rename-value" class="modal-text-input" placeholder="Enter new name..." />
+    <div class="modal-footer-btns">
+      <button id="btn-rename-cancel" class="secondary-pill-btn">Cancel</button>
+      <button id="btn-rename-confirm" class="primary-pill-btn">Save</button>
+    </div>
+  </div>
+
+  <div id="app-toast" class="app-toast hidden">Saved successfully</div>
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner-ring"></div>
+    <p id="loading-text">Opening presentation...</p>
+  </div>
+
+  <script src="app-storage.js"></script>
+  <script src="pptx-engine.js"></script>
+  <script src="gestures-player.js"></script>
+  <script src="editor-export.js"></script>
+</body>
+</html>
